@@ -1,0 +1,54 @@
+
+library(ggplot2)
+library(readxl)
+library(dplyr)
+
+# Carregar os dados
+taxa_de_homicidios <- read_excel("C:/Users/Joao Caetano/Downloads/taxa-de-homicidios-estimados-2013-01-15-2023-01-15.xlsx")
+homicidios_estimados <- read_excel("C:/Users/Joao Caetano/Downloads/homicidios-estimados.xlsx")
+
+
+
+#1 Criar o gráfico de taxa de homicídios
+ggplot(homicidios_estimados, aes(x = ano, y = valor)) +
+  geom_line(color = "#e74c3c", linewidth = 0.8) +
+  geom_point(color = "#c0392b", size = 1.5) +
+  facet_geo(~ nome, grid = "br_states_grid1") +
+  labs(
+    title = "Número Absoluto de Homicídios (2013-2023)",
+    subtitle = "Estimativas do Atlas da Violência - IPEA",
+    x = "Ano",
+    y = "Número de homicídios",
+    caption = "Elaborado por João Caetano Leite com dados do Atlas da Violência/IPEA"
+  ) +
+  theme_minimal() +
+  theme(
+    strip.text = element_text(face = "bold", size = 9),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+    axis.text.y = element_text(size = 7),
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 11, color = "gray40")
+  )
+
+
+# Gráfico 2: Homicídios Absolutos por Região
+ggplot(homicidios_estimados, aes(x = ano, y = valor, color = nome, group = nome)) +
+  geom_line(linewidth = 0.8) +
+  geom_point(size = 1.2) +
+  facet_wrap(~ regiao, scales = "free_y", ncol = 2) +
+  labs(
+    title = "Número Absoluto de Homicídios (2013-2023)",
+    subtitle = "Por Região - Estimativas do Atlas da Violência - IPEA",
+    x = "Ano",
+    y = "Número de homicídios",
+    color = "Estado",
+    caption = "Elaborado por João Caetano Leite com dados do Atlas da Violência/IPEA"
+  ) +
+  theme_minimal() +
+  theme(
+    strip.text = element_text(face = "bold", size = 11),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 11, color = "gray40"),
+    legend.position = "bottom"
+  )
